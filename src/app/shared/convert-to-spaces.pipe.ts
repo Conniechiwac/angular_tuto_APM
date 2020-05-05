@@ -5,7 +5,7 @@
  * => declare the name of the pipe in ngModule into app.module & import the custom pipe from the folder where it placed
  */
 
-import { Pipe, PipeTransform } from '@angular/core'
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe ({
     name: 'convertToSpaces'
@@ -13,8 +13,7 @@ import { Pipe, PipeTransform } from '@angular/core'
 
 export class ConvertToSpacesPipe implements PipeTransform {
 
-    transform(value: string,
-        character: string) : string {
+    transform(value: string, character: string): string {
         return value.replace(character, ' ');
     }
 

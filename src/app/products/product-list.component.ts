@@ -5,7 +5,7 @@ import { IProduct } from './product';
 import { Component, OnInit } from '@angular/core';
 // width what is it composed of (how angular can identify it to read in wich html template)
 @Component ({
-    selector :'pm-products',
+    selector : 'pm-products',
     templateUrl : './product-list.component.html',
     styleUrls : ['./product-list.component.css']
 })
