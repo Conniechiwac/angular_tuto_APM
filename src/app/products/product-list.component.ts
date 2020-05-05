@@ -1,13 +1,18 @@
+import { ProductService } from './product.service';
+
 // to import the interface that we use in the class ProductListComponent
 import { IProduct } from './product';
 
 // every component has to have this import below as { component }
 import { Component, OnInit } from '@angular/core';
+
+
 // width what is it composed of (how angular can identify it to read in wich html template)
 @Component ({
     selector : 'pm-products',
     templateUrl : './product-list.component.html',
-    styleUrls : ['./product-list.component.css']
+    styleUrls : ['./product-list.component.css'],
+    providers: [ProductService]
 })
 
 export class ProductListComponent implements OnInit {
@@ -17,9 +22,19 @@ export class ProductListComponent implements OnInit {
     imageWidth: number = 50;
     imageMargin: number = 2;
     showImage: boolean = false;
+    message: string;
 
     _listFilter: string;
 
+    filteredProducts: IProduct [];
+
+     // when the array has no type we use any [] = [...] has a type.
+    // but when we've got one type we can use an interface to report it, here 'IProduct'
+    // we get their data from  the service.
+    products: IProduct [] = [];
+
+
+    // getter & setter---------------------------------------------------------------------------------------------
     /* GET => defines read-only property
      * usefull to provide a property who the value can be calculated
      * or when we want to expose the value of internal variable sych as a property from a service
@@ -42,80 +57,19 @@ export class ProductListComponent implements OnInit {
       this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products;
     }
 
-    message: string;
-    filteredProducts: IProduct [];
 
+
+    // constructor-----------------------------------------------------------------------------------------------------
     // this class is a function that is played when the compenent is first initialized
-    constructor() {
-      this.filteredProducts = this.products;
+    /* we use the same constructor to call the component service (we type it and add : with the type with majuscule
+      => wich is the same as the name of the service */
+    constructor(private productService: ProductService) {
+
       // to set the default value to 'cart'
       this.listFilter = 'cart';
     }
 
-
-    onRatingClicked(message: string): void {
-      this.pageTitle = 'Product List: ' + message;
-    }
-
-
-    // when the array has no type we use any [] = [...] has a type.
-    // but when we've got one type we can use an interface to report it, here 'IProduct'.
-    products: IProduct [] = [
-        {
-            "productId": 1,
-            "productName": "Leaf Rake",
-            "productCode": "GDN-0011",
-            "releaseDate": "March 19, 2019",
-            "description": "Leaf rake with 48-inch wooden handle.",
-            "price": 19.95,
-            "starRating": 3.2,
-            "imageUrl": "assets/images/leaf_rake.png"
-          },
-          {
-            "productId": 2,
-            "productName": "Garden Cart",
-            "productCode": "GDN-0023",
-            "releaseDate": "March 18, 2019",
-            "description": "15 gallon capacity rolling garden cart",
-            "price": 32.99,
-            "starRating": 4.2,
-            "imageUrl": "assets/images/garden_cart.png"
-          },
-          {
-            "productId": 5,
-            "productName": "Hammer",
-            "productCode": "TBX-0048",
-            "releaseDate": "May 21, 2019",
-            "description": "Curved claw steel hammer",
-            "price": 8.9,
-            "starRating": 4.8,
-            "imageUrl": "assets/images/hammer.png"
-          },
-          {
-            "productId": 8,
-            "productName": "Saw",
-            "productCode": "TBX-0022",
-            "releaseDate": "May 15, 2019",
-            "description": "15-inch steel blade hand saw",
-            "price": 11.55,
-            "starRating": 3.7,
-            "imageUrl": "assets/images/saw.png"
-          },
-          {
-            "productId": 10,
-            "productName": "Video Game Controller",
-            "productCode": "GMG-0042",
-            "releaseDate": "October 15, 2018",
-            "description": "Standard two-button video game controller",
-            "price": 35.95,
-            "starRating": 4.6,
-            "imageUrl": "assets/images/xbox-controller.png"
-          }
-    ];
-
-    // methods------------------------------------------
-
-    // TODO: à revoir
+    // methods--------------------------------------------------------------------------------------------------------------
     performFilter(filterBy: string): IProduct[] {
       // converting the filter by lowercase (because less sensible to break)
       filterBy = filterBy.toLocaleLowerCase();
@@ -130,8 +84,14 @@ export class ProductListComponent implements OnInit {
         this.showImage = !this.showImage;
     }
 
+    onRatingClicked(message: string): void {
+      this.pageTitle = 'Product List: ' + message;
+    }
+
+    // on loading => calling the data from the component service
     ngOnInit(): void {
-      console.log('coucou in onInit');
+      this.products = this.productService.getProducts();
+      this.filteredProducts = this.products;
     }
 
 }
