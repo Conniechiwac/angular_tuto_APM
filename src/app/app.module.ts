@@ -1,4 +1,3 @@
-import { StarComponent } from './shared/star.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductListComponent } from './products/product-list.component';
 import { AppComponent } from './app.component';
 import { ConvertToSpacesPipe } from './shared/convert-to-spaces.pipe';
+import { StarComponent } from './shared/star.component';
 
 @NgModule({
   // here are the things that we need to import from inside the project
