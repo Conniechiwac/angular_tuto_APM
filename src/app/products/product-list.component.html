@@ -25,11 +25,11 @@
 
     <div class='table-responsive'>
       <table class='table'
-      *ngIf='products && products.length'>
+          *ngIf='products && products.length'>
+
         <thead>
           <tr>
             <th>
-
               <!-- event binding -->
               <button class='btn btn-primary'
                (click)='toggleImage()'> {{ showImage ? 'Hide' : 'Show' }} Image</button>
@@ -41,16 +41,19 @@
             <th>5 Star Rating</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor='let product of products'>
-            <td>
 
+        <tbody>
+
+          <!-- to bind to our filterProductes property instead of the products propert only-->
+          <tr *ngFor='let product of filteredProducts'>
+            <td>
               <!-- property binding with pipe-->
               <img *ngIf='showImage' [src]='product.imageUrl'
               [title]='product.productName | uppercase'
               [style.width.px]='imageWidth'
               [style.margin.px]='imageMargin '>
             </td>
+
             <td>{{ product.productName }}</td>
 
             <!-- interpolation with pipes values -->
@@ -59,7 +62,12 @@
 
              <!-- interpolation with pipes value and their parameters -->
             <td>{{ product.price | currency:'EUR':'symbol':'1.2-2' }}</td>
-            <td>{{ product.starRating }}</td>
+
+            <!-- property binding to pass data to the nested component
+                  width an event binding to respond to events from the nested component
+                  using $event to access the event payload passed from the nested component-->
+            <td><pm-star [rating]='product.starRating'
+              (ratingClicked)='onRatingClicked($event)'></pm-star></td>
           </tr>
         </tbody>
       </table>
