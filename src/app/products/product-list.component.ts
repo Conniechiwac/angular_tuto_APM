@@ -1,3 +1,4 @@
+//to let import the data by httpClientModule request
 import { ProductService } from './product.service';
 
 // to import the interface that we use in the class ProductListComponent
@@ -23,6 +24,7 @@ export class ProductListComponent implements OnInit {
     imageMargin: number = 2;
     showImage: boolean = false;
     message: string;
+    errorMessage: string;
 
     _listFilter: string;
 
@@ -88,10 +90,25 @@ export class ProductListComponent implements OnInit {
       this.pageTitle = 'Product List: ' + message;
     }
 
-    // on loading => calling the data from the component service
+    // on loading => calling the data from the component service and set an observable to return it
+    // 01 -Angular first initializes the component and executes the ngOnInit method
+    // we call the getProducts method of the productService, to get the 02
+    // 03 we subscribe to that observable
+
+
+  /* Http Checklist: Subsribing to an observable
+   * Call the subscribe method of the returned observable
+   * Provide the function to handle an emitted item (normally assigns a property to the returned JSON object)
+   * Provide an error function to handle any returned errors
+   */
     ngOnInit(): void {
-      this.products = this.productService.getProducts();
-      this.filteredProducts = this.products;
+      this.productService.getProducts().subscribe({
+        next: products => {
+          this.products = products;
+          this.filteredProducts = this.products;
+        },
+        error: err => this.errorMessage = err
+      });
     }
 
 }
