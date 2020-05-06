@@ -1,3 +1,4 @@
+
 /* To create a service:
  * Service class=>  need a clear name with Service at the end + export keyword
  * Service decorator: need 'Injectabe' + prefix @ and suffix () + import what we need (interface of the component)
@@ -13,66 +14,53 @@
 import { IProduct } from './product';
 import { Injectable } from '@angular/core';
 
+/* http Checklist: Service
+ * => Define a dependency for the http client service (use constructor parameter)
+ * => Create a method for each http request
+ * => Call the desired http method, such as get (and pass in the Url)
+ * => Use generics to specify the return type
+ */
+
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
+
 @Injectable (
   // if we want to use the service into all the app
   // if not => set "providers: [ProductService]" into the @component
   // provideIn: 'root';
 )
 export class ProductService {
+  // identify the location of the web server
+  private productUrl = 'api/products/products.json';
 
-  getProducts(): IProduct[] {
-    return [
-      {
-        "productId": 1,
-        "productName": "Leaf Rake",
-        "productCode": "GDN-0011",
-        "releaseDate": "March 19, 2019",
-        "description": "Leaf rake with 48-inch wooden handle.",
-        "price": 19.95,
-        "starRating": 3.2,
-        "imageUrl": "assets/images/leaf_rake.png"
-      },
-      {
-        "productId": 2,
-        "productName": "Garden Cart",
-        "productCode": "GDN-0023",
-        "releaseDate": "March 18, 2019",
-        "description": "15 gallon capacity rolling garden cart",
-        "price": 32.99,
-        "starRating": 4.2,
-        "imageUrl": "assets/images/garden_cart.png"
-      },
-      {
-        "productId": 5,
-        "productName": "Hammer",
-        "productCode": "TBX-0048",
-        "releaseDate": "May 21, 2019",
-        "description": "Curved claw steel hammer",
-        "price": 8.9,
-        "starRating": 4.8,
-        "imageUrl": "assets/images/hammer.png"
-      },
-      {
-        "productId": 8,
-        "productName": "Saw",
-        "productCode": "TBX-0022",
-        "releaseDate": "May 15, 2019",
-        "description": "15-inch steel blade hand saw",
-        "price": 11.55,
-        "starRating": 3.7,
-        "imageUrl": "assets/images/saw.png"
-      },
-      {
-        "productId": 10,
-        "productName": "Video Game Controller",
-        "productCode": "GMG-0042",
-        "releaseDate": "October 15, 2018",
-        "description": "Standard two-button video game controller",
-        "price": 35.95,
-        "starRating": 4.6,
-        "imageUrl": "assets/images/xbox-controller.png"
-      }
-    ]
+  constructor(private http: HttpClient) {}
 
+  // 02 - the productService returns an observable of IProduct array
+  // 04 and then the http GET request is submitted
+  // tihs is the asynchrinous operation
+  getProducts(): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(this.productUrl).pipe(
+      tap(data => console.log('All: ' + JSON.stringify(data))),
+      catchError(this.handleError)
+    );
   }
+
+  private handleError(err: HttpErrorResponse) {
+    //in a real world app, we may send the server to some remote logging infrastucture
+    // instead of just logging it to the console
+    let errorMessage = '';
+    if (err.error instanceof ErrorEvent) {
+      // Aclient-side or network error occurred. Handle it accordingly.
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      //the backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(errorMessage);
+  }
+
 }
