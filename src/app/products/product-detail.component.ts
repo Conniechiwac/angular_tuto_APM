@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct } from './product';
 
 @Component({
@@ -9,11 +9,31 @@ import { IProduct } from './product';
 export class ProductDetailComponent implements OnInit {
   // tslint:disable-next-line: no-inferrable-types
   pageTitle: string = 'Product Detail';
-  Product: IProduct;
+  product: IProduct;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
+    /* the paramater is provided as a string, we add a '+'.
+     * It is a Javascript shortcut to convert the parameter string into a numeric ID
+     */
+    let id = +this.route.snapshot.paramMap.get('id');
+    this.pageTitle += `: ${id}`;
+    this.product = {
+    "productId": id,
+    "productName": "Leaf Rake",
+    "productCode": "GDN-0011",
+    "releaseDate": "March 19, 2019",
+    "description": "Leaf rake with 48-inch wooden handle.",
+    "price": 19.95,
+    "starRating": 3.2,
+    "imageUrl": "assets/images/leaf_rake.png"
+    }
+  }
+
+  onBack(): void {
+    this.router.navigate(['/products']);
   }
 
 }

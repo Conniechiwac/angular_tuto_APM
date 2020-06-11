@@ -1,3 +1,4 @@
+import { ProductDetailGuard } from './products/product-detail.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -35,7 +36,19 @@ import { WelcomeComponent } from './home/welcome.component';
      */
     RouterModule.forRoot([
       { path: 'products', component: ProductListComponent },
-      { path: 'products/:id', component: ProductDetailComponent },
+      /* we can pass any number of parameters to a route separated by slashes.
+       * by specifying a slash, a colon, and the name of the parameter
+       * pass the parrameter value by adding it to an element of the link parameters array bound to the [routerLink] directive (check it in product-list.component.html) in the <a></a>
+       * read the parameter value in the product-detail.component.ts in the navigated component using the ActivatedRoute service
+       * notice here that the parameter name, id here, is exactly the same as in the route definition.
+       * * To activate a route with code:
+       * => use therouter service (be sure to import the service & define it as a dependency on the constuctor)
+       * => Create a method that calls the navigate method of the router service instance and pass in the link paramaters array
+       * => add a user interface element (use event binding to call the created method)
+       */
+      { path: 'products/:id',
+        canActivate: [ProductDetailGuard],
+        component: ProductDetailComponent },
       { path: 'welcome', component: WelcomeComponent },
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       // usually use to redirect to the 404 page
