@@ -1,4 +1,4 @@
-//to let import the data by httpClientModule request
+// to let import the data by httpClientModule request
 import { ProductService } from './product.service';
 
 // to import the interface that we use in the class ProductListComponent
@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 
 // width what is it composed of (how angular can identify it to read in wich html template)
 @Component ({
-    selector : 'pm-products',
+    // selector : 'pm-products', was before using a routerModule
     templateUrl : './product-list.component.html',
     styleUrls : ['./product-list.component.css'],
     providers: [ProductService]
@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit {
 
     filteredProducts: IProduct [];
 
-     // when the array has no type we use any [] = [...] has a type.
+    // when the array has no type we use any [] = [...] has a type.
     // but when we've got one type we can use an interface to report it, here 'IProduct'
     // we get their data from  the service.
     products: IProduct [] = [];
