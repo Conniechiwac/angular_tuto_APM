@@ -12,21 +12,22 @@ import { ConvertToSpacesPipe } from './shared/convert-to-spaces.pipe';
 import { StarComponent } from './shared/star.component';
 import { ProductDetailComponent } from './products/product-detail.component';
 import { WelcomeComponent } from './home/welcome.component';
+import { ProductModule } from './products/product.module';
 
 @NgModule({
   // here are the things that we need to import from inside the project
   declarations: [
     AppComponent,
-    ProductListComponent,
-    ConvertToSpacesPipe,
-    StarComponent,
-    ProductDetailComponent,
+    //ProductListComponent,
+    //ConvertToSpacesPipe,
+    //StarComponent,
+    //ProductDetailComponent,
     WelcomeComponent
   ],
   // here are the things that we need to import from outside the project
   imports: [
     BrowserModule,
-    FormsModule,
+    //FormsModule,
     HttpClientModule,
     /* ensure that the routes are available to the application
      * => by passing the RouterModule and bu calling forRoot method
@@ -53,7 +54,9 @@ import { WelcomeComponent } from './home/welcome.component';
       { path: '', redirectTo: 'welcome', pathMatch: 'full' },
       // usually use to redirect to the 404 page
       { path: '**', redirectTo: 'welcome', pathMatch: 'full' },
-    ])
+    ]),
+    // created with the command: ng g m products/product --flat -m app
+    ProductModule
   ],
   providers: [],
   bootstrap: [AppComponent]
